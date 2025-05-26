@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwiftMultisig</title>
+    <meta property="og:title" content="Manage your Crypto Wallets with Confidence">
+    <meta property="og:description"
+        content="SwiftMultisig - A web3 application that allows you to track, analyze and secure all of your multisig wallets. Join over 3500+ users to secure and mange your multisig wallets with ease.">
+    <meta property="og:image" content="./card2.png">
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="logo.png">
+    <link rel="stylesheet" href="all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #2d1b69 0%, #1a103f 100%);
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 4rem;
+            background-color: rgb(26, 23, 80);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            padding: 0.5rem 4rem;
+            background-color: rgba(26, 16, 63, 0.98);
+        }
+
+        .logo {
+            width: 10%;
+            height: 7%;
+            mix-blend-mode: inherit;
+        }
+
+        .navbar.scrolled .logo {
+            width: 100px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #7c5cff;
+        }
+
+        .download-btn {
+            background: #7c5cff;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background: #9579ff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(124, 92, 255, 0.3);
+        }
+
+        /* Hero Section */
+
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            margin-bottom: 2rem;
+            font-weight: 700;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards;
+            animation-delay: 0.5s;
+        }
+
+        .download-section {
+            margin: 3rem auto;
+            max-width: 400px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease forwards;
+            animation-delay: 1s;
+        }
+
+        .download-linux {
+            background: rgba(124, 92, 255, 0.2);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .download-linux:hover {
+            background: rgba(124, 92, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(124, 92, 255, 0.3);
+        }
+
+        .other-devices {
+            margin-top: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+        }
+
+        /* Cards Section */
+
+        .cards-section {
+            padding: 4rem 2rem;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: linear-gradient(135deg, rgba(243, 242, 248, 0.2), rgba(124, 92, 255, 0.1));
+            padding: 2rem;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(124, 92, 255, 0.3) 0%, transparent 50%);
+            opacity: 0;
+            transition: all 0.5s ease;
+            z-index: -1;
+        }
+
+        .card:hover::before {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .card p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2rem;
+        }
+
+        .learn-more {
+            background: rgba(124, 92, 255, 0.3);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            align-self: flex-start;
+        }
+
+        .learn-more:hover {
+            background: rgba(124, 92, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(124, 92, 255, 0.3);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* New Sections */
+
+        .features-section,
+        .testimonials-section,
+        .explore-web3-section {
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .feature-cards,
+        .testimonial-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card,
+        .testimonial-card {
+            background: rgba(124, 92, 255, 0.1);
+            padding: 2rem;
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .feature-card:hover,
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(124, 92, 255, 0.2);
+        }
+
+        .feature-icon,
+        .testimonial-avatar {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title,
+        .testimonial-name {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-description,
+        .testimonial-quote {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .testimonial-rating {
+            color: #ffd700;
+            font-size: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        /* Explore Web3 Section */
+
+        .crypto-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .crypto-logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+
+        .explore-web3-btn {
+            background: #7c5cff;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .explore-web3-btn:hover {
+            background: #9579ff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(124, 92, 255, 0.3);
+        }
+
+        /* Responsive Design */
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem 2rem;
+            }
+
+            .navbar.scrolled {
+                padding: 0.5rem 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .features {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .crypto-logos {
+                gap: 1rem;
+            }
+
+            .crypto-logo {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+
+
+
+<body>
+    <nav class="navbar scrolled">
+        <img src="logo.png" alt="Exodus Logo" class="logo">
+        <div class="nav-links">
+            
+            <a href="./app/index.html">Connect to multisig</a>
+            
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>SwiftMultisig<br>Finance, Digital Tracker and Analyzer for multisig wallets</h1>
+
+        <div class="features">
+            <div class="feature">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Solve multisig related issue</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-coins"></i>
+                <span>Millions of assets supported (both solana and evm)</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-chart-line"></i>
+                <span>Stake and earn rewards</span>
+            </div>
+        </div>
+
+        <div class="download-section">
+            <button onclick="window.location.href='./app/index.html'" class="download-linux">
+                <i class="fas fa-download"></i>
+                Connect Wallet
+            </button>
+            <p class="other-devices">Explore blockchain apps</p>
+        </div>
+    </section>
+
+    <section class="cards-section">
+        <div class="cards">
+            <div class="card">
+                <img src="card1.webp" alt="Buy Crypto" class="card-image">
+                <h3>Buy crypto with your local currency</h3>
+                <p>Start your crypto journey using your credit/debit card, bank account, Apple Pay, or Google Pay</p>
+                <button class="learn-more ">LEARN MORE</button>
+            </div>
+            <div class="card ">
+                <img src="card2.png" alt="NYSE Listing " class="card-image ">
+                <h3>Trading ON NYSE AMERICAN</h3>
+                <p>Your trusted platform for cryptocurrency trading, analysis, and insights.</p>
+                <p>Trade via your preferred stock brokerage</p>
+                <button class="learn-more ">LEARN MORE</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="features-section ">
+        <a href="./features/index.html">
+            <h2 class="section-title " style="opacity: 1; transform: translateY(0px);">Key Features</h2>
+        </a>
+        <div class="feature-cards "><a href="./features/index.html">
+                <div class="feature-card " style="opacity: 1; transform: translateY(0px);">
+                    <div class="feature-icon ">🔒</div>
+                    <h3 class="feature-title ">Secure Storage</h3>
+                    <p class="feature-description ">Keep your crypto safe with our state-of-the-art security measures.
+                    </p>
+                </div>
+            </a>
+
+            <a href="./features/index.html">
+                <div class="feature-card " style="opacity: 1; transform: translateY(0px);">
+                    <div class="feature-icon ">💱</div>
+                    <h3 class="feature-title ">Easy Exchange</h3>
+                    <p class="feature-description ">Swap between different cryptocurrencies with just a few clicks.</p>
+                </div>
+            </a>
+
+            <a href="https://coinstats.app/">
+                <div class="feature-card " style="opacity: 1; transform: translateY(0px);">
+                    <div class=" feature-icon ">📊</div>
+                    <h3 class="feature-title ">Real-time Analytics</h3>
+                    <p class="feature-description ">Track your portfolio performance with detailed charts and insights.
+                    </p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section class="explore-web3-section ">
+        <h2 class="section-title " style="opacity: 1; transform: translateY(0px);">Connect to Web3</h2>
+        <p>Explore the world of decentralized finance and applications across multiple networks.</p>
+        <div class="crypto-logos ">
+            <img src="urn:scrapbook:download:error:https://cryptologos.cc/logos/ethereum-eth-logo.png" alt="Ethereum "
+                class="crypto-logo ">
+            <img src="urn:scrapbook:download:error:https://cryptologos.cc/logos/bitcoin-btc-logo.png" alt="Bitcoin "
+                class="crypto-logo ">
+            <img src="urn:scrapbook:download:error:https://cryptologos.cc/logos/solana-sol-logo.png" alt="Solana "
+                class="crypto-logo ">
+            <img src="urn:scrapbook:download:error:https://cryptologos.cc/logos/cardano-ada-logo.png" alt="Cardano "
+                class="crypto-logo ">
+            <img src="urn:scrapbook:download:error:https://cryptologos.cc/logos/polkadot-new-dot-logo.png"
+                alt="Polkadot " class="crypto-logo ">
+        </div>
+        <a href="./features/index.html" class="explore-web3-btn ">Explore Web3 Features</a>
+    </section>
+
+    <section class="testimonials-section ">
+        <h2 class="section-title " style="opacity: 1; transform: translateY(0px);">What Our Users Say</h2>
+        <div class="testimonial-cards ">
+            <div class="testimonial-card " style="opacity: 1; transform: translateY(0px);">
+                <h3 class="testimonial-name ">James D.</h3>
+                <p class="testimonial-quote ">"Blockchain Mesh has made managing my crypto portfolio a breeze. Highly
+                    recommended! "</p>
+                <div class="testimonial-rating ">⭐⭐⭐⭐⭐</div>
+            </div>
+            <div class="testimonial-card " style="opacity: 1; transform: translateY(0px);">
+                <h3 class="testimonial-name ">Sarah M.</h3>
+                <p class="testimonial-quote ">"The user interface is intuitive, and the security features give me peace
+                    of mind. "</p>
+                <div class="testimonial-rating ">⭐⭐⭐⭐⭐</div>
+            </div>
+            <div class="testimonial-card " style="opacity: 1; transform: translateY(0px);">
+                <h3 class="testimonial-name ">Alex K.</h3>
+                <p class="testimonial-quote ">"I love how easy it is to stake my crypto and earn rewards with Exodus. "
+                </p>
+                <div class="testimonial-rating ">⭐⭐⭐⭐</div>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>
